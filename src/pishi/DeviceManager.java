@@ -15,7 +15,7 @@ public class DeviceManager {
 
     public static void addDevice(Device device) {
         if (devices.contains(device))
-            throw new DuplicateElementException("");
+            throw new DuplicateElementException("duplicate device name");
         devices.add(device);
     }
 
@@ -45,7 +45,7 @@ public class DeviceManager {
     public static void removeDevice(String deviceName) {
         boolean isRemoved = devices.removeIf(device -> device.getName().equals(deviceName));
         if (!isRemoved)
-            throw new DeviceNotFoundException(deviceName + "not found to delete.");
+            throw new DeviceNotFoundException(deviceName + " not found to delete.");
     }
 
     public static void listDevices() {
@@ -57,16 +57,16 @@ public class DeviceManager {
         }
     }
 
-    public static boolean contain(String deviceName) {
+    public static void contain(String deviceName) {
         for (Device device : devices) {
             if (device.getName().equals(deviceName)) {
-                return true;
+                return;
             }
         }
-        return false;
+        throw new DeviceNotFoundException(deviceName + "not exist.");
     }
 
-    public static void addRule(Rule rule) {
+    public static void addRule(Rule rule) throws DuplicateElementException{
         if (rules.contains(rule))
             throw new DuplicateElementException("");
         rules.add(rule);
@@ -96,12 +96,24 @@ public class DeviceManager {
         }
     }
 
-    public static boolean containRule(Rule rule) {
+    public static void checkRule(String time) {
+        for (Rule rule : rules)
+            if (rule.time().equals(time)) {
+                Device device = findDevice(rule.deviceName());
+                if (rule.action().equals("on"))
+                    device.turnOn();
+                else
+                    device.turnOff();
+                removeRule(rule);
+            }
+    }
+
+    public static void containRule(Rule rule) {
         for (Rule r : rules) {
             if (r.equals(rule)) {
-                return true;
+                return;
             }
         }
-        return false;
+        throw new RuleNotFoundException("Rule for " + rule.deviceName() + " at " + rule.time() + " not found.");
     }
 }

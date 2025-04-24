@@ -5,11 +5,21 @@ public class LightDevice extends Device {
 
     public LightDevice(String name, Protocol protocol) {
         super(name, protocol);
-        brightness = 0;
     }
 
     @Override
     public String toString() {
-        return String.format("Device:[name:%s , protocol:%s, type:Light", getName(), getProtocol());
+        return String.format("light:[name:%s , status:%s, brightness:%d]",
+                getName(), getState(), brightness);
+    }
+
+    public int getBrightness() {
+        return brightness;
+    }
+
+    public void setBrightness(int brightness) throws IllegalArgumentException{
+        if (brightness > 0 && brightness < 100)
+            this.brightness = brightness;
+        else throw new IllegalArgumentException("invalid value for brightness.");
     }
 }

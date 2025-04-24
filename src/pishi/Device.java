@@ -1,29 +1,27 @@
 package pishi;
 
-import exceptions.DeviceNotFoundException;
-
-import java.util.ArrayList;
 import java.util.Objects;
 
 public abstract class Device {
     private String name;
     private Protocol protocol;
-    private boolean state;
+    private String state;
 
     public Device(String name, Protocol protocol) {
         setName(name);
         setProtocol(protocol);
+        turnOff();
     }
 
     public void turnOn() {
-        state = true;
+        state = "on";
     }
 
     public void turnOff() {
-        state = false;
+        state = "off";
     }
 
-    public boolean getState() {
+    public String getState() {
         return state;
     }
 
